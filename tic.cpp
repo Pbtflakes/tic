@@ -15,8 +15,14 @@ enum game_t {
 };
 
 void	boardstate(game_t[][S]);
+void	inputfilter(game_t[][S], game_t);
+void	gameloop(game_t[][S], game_t);
+/* Functions to check for win conditions */
 game_t	winstate(game_t[][S]);
 game_t	winrow(game_t[][S]);
+game_t	wincolumn(game_t[][S]);
+game_t	windiagonal(game_t[][S]);
+game_t	windeadlock(game_t[][S]);
 
 int
 main(void) {
@@ -26,12 +32,10 @@ main(void) {
 			board[i][j] = N;
 		}
 	}
-	/*
-	while (winstate(board) == N_) {
-		inputfilter();
-		}
-		*/
-	boardstate(board);
+	while (winstate(board) == N) {
+		gameloop(board, A);
+		gameloop(board, B);
+	}
 
 	return 0;
 }
@@ -49,6 +53,24 @@ boardstate(game_t state[][S]) {
 	}
 }
 
+void
+inputfilter(game_t state[][S], game_t player) {
+	int row, col;
+	do {
+		std::cout << "row: ";
+		std::cin >> row;
+		std::cout << "col: ";
+		std::cin >> col;
+	} while (state[row][col] != N);
+	state[row][col] = player;
+}
+
+void
+gameloop(game_t board[][S], game_t n) {
+	inputfilter(board, n);
+	boardstate(board);
+}
+
 /* Check whether the inputted board state satisfies the win condition for
  * either player. This is probably going to be the most ``ugly'' bit of code,
  * combined with some subfunctions for specific checks. */
@@ -56,8 +78,15 @@ game_t
 winstate(game_t state[][S]) {
 	if (winrow(state) != N) {
 		return winrow(state);
+	} else if (wincolumn(state) != N) {
+		return wincolumn(state);
+	} else if (windiagonal(state) != N) {
+		return windiagonal(state);
+	} else if (windeadlock(state) == T) {
+		return T;
+	} else {
+		return N;
 	}
-	return N;
 }
 
 game_t
@@ -68,4 +97,44 @@ winrow(game_t state[][S]) {
 		}
 	}
 	return N;
+}
+
+game_t
+wincolumn(game_t state[][S]) {
+	for (int j = 0; j < S; j++) {
+		if (state[0][j] == state[1][j] && state[1][j] == state[2][j]) {
+			return state[0][j];
+		}
+	}
+	return N;
+}
+
+
+/* Check for either win condition along diagonals */
+game_t
+windiagonal(game_t state[][S]) {
+	if (state[0][0] == state[1][1] && state[1][1] == state[2][2]) {
+		return state[0][0];
+	} else if (state[2][0] == state[1][1] && state[1][1] == state[0][2]) {
+		return state[1][1];
+	} else {
+		return N;
+	}
+}
+
+game_t
+windeadlock(game_t state[][S]) {
+	int tie = 1;
+	for (int i = 0; i < S; i++) {
+		for (int j = 0; j < S; j++) {
+			if (state[i][j] == N) {
+				tie = 0;
+			}
+		}
+	}
+	if (tie) {
+		return T;
+	} else {
+		return N;
+	}
 }
