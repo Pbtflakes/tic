@@ -1,8 +1,10 @@
+/* Tic-Tac-Toe
+ * (C) Matthew Lavin 2017, GNU GPLv3
+ * Period 5 C++ Section 7.2 practice programs*/
 #include <iostream>
 
-enum {
-	S = 3
-};
+/* Magic number for board dimensions */
+enum {S = 3};
 
 /* Type for board locations, placed pieces are A or B while empty spot is N */
 enum game_t {
@@ -11,7 +13,6 @@ enum game_t {
 	B,
 	T
 };
-
 
 void	boardstate(game_t[][S]);
 game_t	winstate(game_t[][S]);
