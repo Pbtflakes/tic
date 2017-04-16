@@ -26,6 +26,7 @@ int	windeadlock(game_t[][S]);
 
 int
 main(void) {
+	std::cout << "note: positions are currently zero-indexed\n";
 	game_t board[S][S];
 	for (int i = 0; i < S; i++) {
 		for (int j = 0; j < S; j++) {
