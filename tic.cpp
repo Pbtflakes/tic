@@ -8,9 +8,9 @@ enum {S = 3};
 
 /* Type for board locations, placed pieces are A or B while empty spot is N */
 enum game_t {
-	N,
-	A,
-	B,
+	N = '*',
+	A = 'X',
+	B = 'O',
 	T
 };
 
@@ -45,7 +45,7 @@ main(void) {
 	if (windeadlock(board)) {
 		std::cout << "Tied";
 	} else {
-		std::cout << "Player " << winstate(board) << " wins.";
+		std::cout << "Player " << (char) winstate(board) << " wins.";
 	}
 	std::cout << std::endl;
 
@@ -59,7 +59,7 @@ void
 boardstate(game_t state[][S]) {
 	for (int i = 0; i < S; i++) {
 		for (int j = 0; j < S; j++) {
-			std::cout << state[i][j];
+			std::cout << (char) state[i][j];
 		}
 		std::cout << std::endl;
 	}
