@@ -8,8 +8,10 @@ enum {
 enum game_t {
 	N,
 	A,
-	B
+	B,
+	T
 };
+
 
 void	boardstate(game_t[][S]);
 game_t	winstate(game_t[][S]);
@@ -23,7 +25,11 @@ main(void) {
 			board[i][j] = N;
 		}
 	}
-
+	/*
+	while (winstate(board) == N_) {
+		inputfilter();
+		}
+		*/
 	boardstate(board);
 
 	return 0;
@@ -43,8 +49,8 @@ boardstate(game_t state[][S]) {
 }
 
 /* Check whether the inputted board state satisfies the win condition for
- * either player. This is probably going to be the most ugly bit of code;
- * specific types of winstate may be spun into their own subfunctions. */
+ * either player. This is probably going to be the most ``ugly'' bit of code,
+ * combined with some subfunctions for specific checks. */
 game_t
 winstate(game_t state[][S]) {
 	if (winrow(state) != N) {
@@ -56,8 +62,9 @@ winstate(game_t state[][S]) {
 game_t
 winrow(game_t state[][S]) {
 	for (int i = 0; i < S; i++) {
-		if (state[i][0] == state[i][1] && state[i][1] == state[i][2])
+		if (state[i][0] == state[i][1] && state[i][1] == state[i][2]) {
 			return state[i][0];
+		}
 	}
 	return N;
 }
