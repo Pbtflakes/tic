@@ -22,7 +22,7 @@ game_t	winstate(game_t[][S]);
 game_t	winrow(game_t[][S]);
 game_t	wincolumn(game_t[][S]);
 game_t	windiagonal(game_t[][S]);
-game_t	windeadlock(game_t[][S]);
+int	windeadlock(game_t[][S]);
 
 int
 main(void) {
@@ -32,10 +32,22 @@ main(void) {
 			board[i][j] = N;
 		}
 	}
-	while (winstate(board) == N) {
+	while (1) {
 		gameloop(board, A);
+		if (windeadlock(board) || winstate(board) != N) {
+			break;
+		}
 		gameloop(board, B);
+		if (windeadlock(board) || winstate(board) != N) {
+			break;
+		}
 	}
+	if (windeadlock(board)) {
+		std::cout << "Tied";
+	} else {
+		std::cout << "Player " << winstate(board) << " wins.";
+	}
+	std::cout << std::endl;
 
 	return 0;
 }
@@ -122,7 +134,7 @@ windiagonal(game_t state[][S]) {
 	}
 }
 
-game_t
+int
 windeadlock(game_t state[][S]) {
 	int tie = 1;
 	for (int i = 0; i < S; i++) {
@@ -132,9 +144,5 @@ windeadlock(game_t state[][S]) {
 			}
 		}
 	}
-	if (tie) {
-		return T;
-	} else {
-		return N;
-	}
+	return tie;
 }
